@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:32:09 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/22 18:58:38 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/22 19:54:44 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include <string>
 #include <sys/socket.h>
-
+#include <iostream>
 class Server
 {
     private:
