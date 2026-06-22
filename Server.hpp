@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:32:09 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/22 18:43:48 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/22 18:58:38 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 #define SERVER_HPP
 
 #include <string>
+#include <sys/socket.h>
 
 class Server
 {
     private:
-        std::string 
+        std::string _password;
+        int _port;
+        int _listen_fd;
     public :
         // Default Constructor
         Server();
