@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 22:13:19 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 22:23:49 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,7 @@ void Server::start()
                 }
                 else if (bytes < 0)
                 {
-           
-                    close(fd_list[i].fd);
-                    fd_list.erase(fd_list.begin() + i);
-                    --i;
-                    continue;
+                    throw std::runtime_error("fail recv");
                 }
             }
         }       
