@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:32:09 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 20:26:47 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 21:52:30 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <poll.h>
 #include <netinet/in.h>
 #include <vector>
+
+#define BUFFER_SIZE 4096
 
 class Server
 {

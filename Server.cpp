@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 20:44:11 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 21:52:48 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ Server::~Server() {
 }
 
 
-Server::start()
+void Server::start()
 {
     _listen_fd = socket(PF_INET, SOCK_STREAM, 0);
     if (_listen_fd < 0)
@@ -78,6 +78,7 @@ Server::start()
     listen_fd_struct.fd = _listen_fd;
     listen_fd_struct.events = POLL_IN;
     fd_list.push_back(listen_fd_struct);
+    char buffer[BUFFER_SIZE];
     while (true)
     {
         int p =  poll(fd_list.data(), fd_list.size(), -1);
@@ -87,21 +88,26 @@ Server::start()
         }else if (p < 0)
         {
             throw std::runtime_error("poll failed");
-        }else
+        }
+        for (size_t i = 0; i < fd_list.size(); i++)
         {
-            if (fd_list[0].revents == POLL_IN)
+            if (fd_list[i].revents & POLL_IN)
             {
-                int new_fd = accept(_listen_fd, nullptr, nullptr);
-                if (new_fd < 0)
+                if (fd_list[i].fd == _listen_fd)
                 {
-                    throw std::runtime_error("accept failed");
+                    int new_fd = accept(_listen_fd, nullptr, nullptr);
+                    if (new_fd < 0)
+                    {
+                        throw std::runtime_error("accept failed");
+                    }
+                    struct pollfd connect_struct;
+                    connect_struct.fd = new_fd;
+                    connect_struct.events = POLL_IN;
+                    fd_list.push_back(connect_struct);
                 }
-                struct pollfd connect_struct;
-                connect_struct.fd = new_fd;
-                connect_struct.events = POLL_IN;
-                 fd_list.push_back(connect_struct);
+                     
             }
-                       
-        }          
+        }       
+   
+    }          
     }
-}
