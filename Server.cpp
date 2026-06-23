@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 22:23:49 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 22:24:58 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void Server::start()
                 }
                 else if (bytes < 0)
                 {
-                    throw std::runtime_error("fail recv");
+                    throw std::runtime_error("recv fail");
                 }
             }
         }       
