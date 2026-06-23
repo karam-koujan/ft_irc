@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 21:56:00 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 22:13:19 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void Server::start()
     std::vector<struct pollfd> fd_list;
     struct pollfd listen_fd_struct;
     listen_fd_struct.fd = _listen_fd;
-    listen_fd_struct.events = POLL_IN;
+    listen_fd_struct.events = POLLIN;
     fd_list.push_back(listen_fd_struct);
     char buffer[BUFFER_SIZE];
     while (true)
@@ -91,7 +91,7 @@ void Server::start()
         }
         for (size_t i = 0; i < fd_list.size(); i++)
         {
-            if (fd_list[i].revents & POLL_IN)
+            if (fd_list[i].revents & POLLIN)
             {
                 if (fd_list[i].fd == _listen_fd)
                 {
@@ -100,13 +100,35 @@ void Server::start()
                     {
                         throw std::runtime_error("accept failed");
                     }
+                    int flags = fcntl(new_fd, F_GETFL, 0);
+                    if (flags < 0) {
+                        throw std::runtime_error("fcntl is failed");
+                    }
+                    if (fcntl(new_fd, F_SETFL, flags | O_NONBLOCK) < 0) {
+                        throw std::runtime_error("fctnl is failed");
+                    }
                     struct pollfd connect_struct;
                     connect_struct.fd = new_fd;
-                    connect_struct.events = POLL_IN;
+                    connect_struct.events = POLLIN;
                     fd_list.push_back(connect_struct);
                     continue;
                 }
-                     
+                size_t bytes = recv(fd_list[i].fd, buffer, sizeof(buffer), 0);
+                if (bytes == 0)
+                {
+                    close(fd_list[i].fd);
+                    fd_list.erase(fd_list.begin() + i);
+                    --i;
+                    continue;
+                }
+                else if (bytes < 0)
+                {
+           
+                    close(fd_list[i].fd);
+                    fd_list.erase(fd_list.begin() + i);
+                    --i;
+                    continue;
+                }
             }
         }       
    
