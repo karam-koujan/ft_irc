@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:32:09 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/22 19:54:44 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 20:26:47 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,13 @@
 
 #include <string>
 #include <sys/socket.h>
+#include <fcntl.h>
 #include <iostream>
+#include <unistd.h>    
+#include <poll.h>
+#include <netinet/in.h>
+#include <vector>
+
 class Server
 {
     private:
