@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 21:52:48 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/23 21:56:00 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ Server::Server(const Server& other) {
 Server& Server::operator=(const Server& other) {
     std::cout << "Copy assignment operator called" << std::endl;
     if (this != &other) {
-        this->_port = other.port
-        this->_password = other.password;
+        this->_port = other._port;
+        this->_password = other._password;
     }
     return *this;
 }
@@ -104,6 +104,7 @@ void Server::start()
                     connect_struct.fd = new_fd;
                     connect_struct.events = POLL_IN;
                     fd_list.push_back(connect_struct);
+                    continue;
                 }
                      
             }
