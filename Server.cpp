@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/23 22:24:58 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/25 16:19:38 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,18 @@ void Server::start()
                 {
                     throw std::runtime_error("recv fail");
                 }
-            }
+				fd_list[i].events |= POLLOUT;
+				
+			}
+			if (fd_list[i].revents & POLLOUT)
+			{
+				size_t bytes = send(fd_list[i].fd, "el bouzz", sizeof(buffer), 0);
+                if (bytes < 0)
+                {
+                    throw std::runtime_error("recv fail");
+                }				
+			}
+
         }       
    
     }          
