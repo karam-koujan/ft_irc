@@ -6,13 +6,13 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/22 18:32:11 by kkoujan           #+#    #+#             */
-/*   Updated: 2026/06/26 09:10:23 by kkoujan          ###   ########.fr       */
+/*   Updated: 2026/06/26 11:06:32 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 
-#include "./servers/server.hpp"
+#include "./server/Server.hpp"
 
 
 
