@@ -1,46 +1,17 @@
 /* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* Server.cpp                                         :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2026/06/22 18:39:32 by kkoujan           #+#    #+#             */
-/* Updated: 2026/06/25 16:40:00 by kkoujan          ###   ########.fr       */
-/* */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/06/26 09:04:47 by kkoujan           #+#    #+#             */
+/*   Updated: 2026/06/26 09:54:25 by kkoujan          ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-// =============================================================================
-// CLIENT CLASS IMPLEMENTATION
-// =============================================================================
-
-Client::Client() : _fd(-1) {}
-
-Client::Client(int fd) : _fd(fd) {}
-
-Client::Client(const Client& other) { *this = other; }
-
-Client& Client::operator=(const Client& other) {
-    if (this != &other) {
-        this->_fd = other._fd;
-        this->_input_buffer = other._input_buffer;
-        this->_output_buffer = other._output_buffer;
-    }
-    return *this;
-}
-
-Client::~Client() {}
-
-int          Client::getFd() const { return _fd; }
-std::string& Client::getInputBuffer() { return _input_buffer; }
-std::string& Client::getOutputBuffer() { return _output_buffer; }
-
-
-// =============================================================================
-// SERVER CLASS IMPLEMENTATION
-// =============================================================================
 
 Server::Server() : _port(0), _listen_fd(-1) {}
 
@@ -60,7 +31,6 @@ Server& Server::operator=(const Server& other) {
 }
 
 Server::~Server() {
-    // Ensure all remaining sockets are cleaned up on structural shutdown
     for (size_t i = 0; i < _fd_list.size(); ++i) {
         close(_fd_list[i].fd);
     }
@@ -77,6 +47,7 @@ void Server::start()
     // 2. Clear port reuse hold time (prevents "Address already in use" errors)
     int sock_opt = 1;
     if (setsockopt(_listen_fd, SOL_SOCKET, SO_REUSEADDR, &sock_opt, sizeof(int)) < 0) {
+        close(_listen_fd);
         throw std::runtime_error("setsockopt failed");
     }
 
@@ -90,6 +61,7 @@ void Server::start()
         throw std::runtime_error("bind failed");
     }
     if (listen(_listen_fd, 128) < 0) { // Set standard backlog queue to 128
+        close(_listen_fd);
         throw std::runtime_error("listen failed");
     }
 
@@ -184,8 +156,8 @@ void Server::handle_client_read(size_t index)
     client.getInputBuffer() += buffer; // Append raw bytes to client buffer 
 
     // Packet Reconstruction: Extract isolated complete lines ending with \n 
-    size_t newline_pos;
-    while ((newline_pos = client.getInputBuffer().find('\n')) != std::string::npos)
+    size_t newline_pos = client.getInputBuffer().find('\n');
+    while (newline_pos  != std::string::npos)
     {
         std::string raw_command = client.getInputBuffer().substr(0, newline_pos);
         
@@ -211,6 +183,7 @@ void Server::handle_client_read(size_t index)
 
         // Erase extracted segment from input stream cache
         client.getInputBuffer().erase(0, newline_pos + 1);
+        newline_pos = client.getInputBuffer().find('\n');
     }
 }
 
